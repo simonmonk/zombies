@@ -63,7 +63,7 @@ while True:
     screen.blit(scaled_image, (0, 0))
     pygame.display.update()
     
-    # check for quit events
+    # check for events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             webcam.stop()
