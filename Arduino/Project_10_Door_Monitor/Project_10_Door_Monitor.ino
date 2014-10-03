@@ -7,7 +7,7 @@
 const int buzzerPin = 11;
 const int backlightPin = 10;
 const int switchPin = A0;
-const int pirPin = 2;   
+const int doorPin = 12;   
 
 //                RS,E,D4,D5,D6,D7         
 LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
@@ -20,14 +20,13 @@ void setup()
   // backlight controlled by transistor D10 high can
   // burn out Arduino pin
   pinMode(backlightPin, INPUT);
-  pinMode(pirPin, INPUT);   
+  pinMode(doorPin, INPUT_PULLUP);
   lcd.begin(16, 2);
 }
 
 void loop() 
 {
-  
-  checkPIR();     
+  checkDoor(); 
   
   if (analogRead(switchPin) < 1000) // any key pressed
   {
@@ -48,7 +47,7 @@ void loop()
   delay(100);
 }
 
-void alarm(char message[])
+void warn(char message[])
 {
   lcd.setCursor(0, 1);
   lcd.print(message);
@@ -58,16 +57,17 @@ void alarm(char message[])
   if (!mute)
   {
     tone(buzzerPin, 1000);
+    delay(100);
+    noTone(buzzerPin);
   }
   delay(100);
 }
 
-
-void checkPIR()
+void checkDoor()
 {
-  if (digitalRead(pirPin))
+  if (digitalRead(doorPin))
   {
-    alarm("ZOMBIES!!");
+    warn("DOOR");
   }
 }
 

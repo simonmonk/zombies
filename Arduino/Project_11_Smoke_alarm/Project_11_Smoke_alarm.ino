@@ -2,12 +2,14 @@
 
 #include <LiquidCrystal.h>
 
+const boolean project11 = true; // Fire Alarm
 
 // Pin allocations
 const int buzzerPin = 11;
 const int backlightPin = 10;
 const int switchPin = A0;
-const int pirPin = 2;   
+const int smokePin = 3;
+
 
 //                RS,E,D4,D5,D6,D7         
 LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
@@ -20,15 +22,14 @@ void setup()
   // backlight controlled by transistor D10 high can
   // burn out Arduino pin
   pinMode(backlightPin, INPUT);
-  pinMode(pirPin, INPUT);   
+  pinMode(smokePin, INPUT);
   lcd.begin(16, 2);
 }
 
 void loop() 
 {
-  
-  checkPIR();     
-  
+  checkSmoke();
+ 
   if (analogRead(switchPin) < 1000) // any key pressed
   {
     mute = ! mute;
@@ -63,11 +64,12 @@ void alarm(char message[])
 }
 
 
-void checkPIR()
+void checkSmoke()
 {
-  if (digitalRead(pirPin))
+  if (digitalRead(smokePin))
   {
-    alarm("ZOMBIES!!");
+    alarm("FIRE!!");
   }
 }
+
 

@@ -2,11 +2,26 @@
 
 #include <LiquidCrystal.h>
 
+/* 
+Any projects that you want to exclude from this program should have a
+value of "false". That way, you will not get any false alarms because
+of missing hardware.
+*/
+const boolean project2 = true; // Battery Monitor
+const boolean project6 = true; // PIR Alarm
+const boolean project10 = true; // Door Monitor
+const boolean project11 = true; // Fire Alarm
+const boolean project12 = true; // Temperature Monitor
+
 // Pin allocations
 const int buzzerPin = 11;
 const int voltagePin = A3;
 const int backlightPin = 10;
 const int switchPin = A0;
+const int pirPin = 2;   
+const int doorPin = 12;   
+const int smokePin = 3;
+const int tempPin = A2;    
 
 
 // Project 2 constants
@@ -16,6 +31,11 @@ const float warnV = 11.7;
 const float R1 = 470.0;
 const float R2 = 270.0;
 const float k = (R1 + R2) / R2;
+
+// Project 12 constants
+// these can be in C or F
+const float maxTemp = 45.0;
+const float minTemp = -10.0;
 
 
 //                RS,E,D4,D5,D6,D7         
@@ -29,12 +49,19 @@ void setup()
   // backlight controlled by transistor D10 high can
   // burn out Arduino pin
   pinMode(backlightPin, INPUT);
+  pinMode(pirPin, INPUT);   
+  pinMode(smokePin, INPUT);
+  pinMode(doorPin, INPUT_PULLUP);
   lcd.begin(16, 2);
 }
 
 void loop() 
 {
-  checkBattery();
+  if (project2) checkBattery();
+  if (project6) checkPIR();     
+  if (project10) checkDoor(); 
+  if (project11) checkSmoke();
+  if (project12) checkTemp();
   
   if (analogRead(switchPin) < 1000) // any key pressed
   {
@@ -58,10 +85,10 @@ void loop()
 void alarm(char message[])
 {
   lcd.setCursor(0, 1);
-  lcd.print("            ");
+  lcd.print(message);
   delay(100);
   lcd.setCursor(0, 1);
-  lcd.print(message);
+  lcd.print("            ");
   if (!mute)
   {
     tone(buzzerPin, 1000);
@@ -69,6 +96,30 @@ void alarm(char message[])
   delay(100);
 }
 
+
+void alarm(char message[], float value)
+{
+  alarm(message);
+  lcd.setCursor(5, 1);
+  lcd.print(" ");
+  lcd.print(value);
+}
+
+void warn(char message[])
+{
+  lcd.setCursor(0, 1);
+  lcd.print(message);
+  delay(100);
+  lcd.setCursor(0, 1);
+  lcd.print("            ");
+  if (!mute)
+  {
+    tone(buzzerPin, 1000);
+    delay(100);
+    noTone(buzzerPin);
+  }
+  delay(100);
+}
 
 
 void checkBattery()
@@ -124,3 +175,52 @@ void displayBar()
 }
 
 
+void checkPIR()
+{
+  if (digitalRead(pirPin))
+  {
+    alarm("ZOMBIES!!");
+  }
+}
+
+void checkDoor()
+{
+  if (digitalRead(doorPin))
+  {
+    warn("DOOR");
+  }
+}
+
+void checkSmoke()
+{
+  if (digitalRead(smokePin))
+  {
+    alarm("FIRE!!");
+  }
+}
+
+
+void checkTemp()
+{
+  float t = readTemp();
+  if (t > maxTemp)
+  {
+    alarm("HOT", t);
+  }
+  else if (t < minTemp)
+  {
+    alarm("COLD", t);
+  }
+}
+
+float readTemp()
+{
+  int raw = analogRead(tempPin);
+  float volts = raw / 205.0;
+  float tempC = 100.0 * volts - 50;
+  float tempF = tempC * 9.0 / 5.0 + 32.0;
+  // One of the following two lines must be uncommented
+  // Either return the temperature in C or F
+  return tempC;
+  // return tempF;
+}
