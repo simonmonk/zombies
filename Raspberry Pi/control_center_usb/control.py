@@ -3,7 +3,7 @@ import serial
 import time
 
 BAUD = 9600
-port = "/dev/ttyACM0"
+PORT = "/dev/ttyACM0"
 
 MIN_VOLTS = 11.0
 TEMP_MIN = -10.0
@@ -40,7 +40,7 @@ class App:
         self.fire_label = Label(self.frame, textvariable=self.fire_var)
         self.fire_label.grid(row=4, column=1)
         
-        self.ser = serial.Serial(port, BAUD, timeout=1)
+        self.ser = serial.Serial(PORT, BAUD, timeout=1)
         time.sleep(2)
         
 
