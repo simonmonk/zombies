@@ -12,6 +12,7 @@ TEMP_MAX = 45.0
 class App:
     
     def __init__(self, master):
+
         self.frame = Frame(master)
         self.frame.pack()
         
