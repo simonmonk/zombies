@@ -1,18 +1,20 @@
 #include <SPI.h>
 #include <Mirf.h>
-#include <nRF24L01.h>
 #include <MirfHardwareSpiDriver.h>
 
 const int numberOfSends = 3;
 
-const int buzzerPin = 4;
-const int switchPin = 5;
+const int buzzerPin = 5;
+const int switchPin = 2;
+
+const int buzzerVolume = 100; // keep less that 153 for 3V
+const int buzzMinDuration = 20;
 
 byte data[] = {0x54, 0x12, 0x01, 0x00};
 
 void setup()
 {
-  pinMode(buzzerPin, OUTPUT);
+  analogWrite(buzzerPin, 0);
   pinMode(switchPin, INPUT_PULLUP);
   Serial.begin(9600);
   Serial.println("HELLO");
@@ -48,16 +50,16 @@ void listenMode()
 void sendMode() 
 {
   Serial.println("Send mode");
-  Mirf.setRADDR((byte *)"clie1");
+  
 }
 
 void checkForBuzz()
 {
   if (data[0]==0x54 && data[1]==0x12 && data[2]==0x01)
   {
-    digitalWrite(buzzerPin, HIGH);
-    delay(100);
-    digitalWrite(buzzerPin, LOW);
+    analogWrite(buzzerPin, buzzerVolume);
+    delay(buzzMinDuration);
+    analogWrite(buzzerPin, 0);
   }
 }
 
