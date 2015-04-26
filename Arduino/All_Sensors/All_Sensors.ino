@@ -7,7 +7,7 @@ Any projects that you want to exclude from this program should have a
 value of "false". That way, you will not get any false alarms because
 of missing hardware.
 */
-const boolean project2 = true; // Battery Monitor
+const boolean project4 = true; // Battery Monitor
 const boolean project6 = true; // PIR Alarm
 const boolean project10 = true; // Door Monitor
 const boolean project11 = true; // Fire Alarm
@@ -57,7 +57,7 @@ void setup()
 
 void loop() 
 {
-  if (project2) checkBattery();
+  if (project4) checkBattery();
   if (project6) checkPIR();     
   if (project10) checkDoor(); 
   if (project11) checkSmoke();
