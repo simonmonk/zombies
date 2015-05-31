@@ -1,48 +1,29 @@
-const int flashPins[] = {2, 3, 4, 5};
-const int chargePin = 6;
+const int flashPins[] = {7, 6, 5};
 
-const int delaySeconds = 30;
-const int chargeSeconds = 10;
-
+const int overallDelay = 30; // seconds
+const int delayBetweenFlashes = 1; // seconds
 
 void setup()
 {
-  for (int i = 0; i < 4; i++)
-  {
-    pinMode(flashPins[i], OUTPUT);
-    digitalWrite(flashPins[i], HIGH);
-  }
-  pinMode(chargePin, OUTPUT);
-  digitalWrite(chargePin, HIGH);
+  pinMode(flashPins[0], OUTPUT);
+  pinMode(flashPins[1], OUTPUT);
+  pinMode(flashPins[2], OUTPUT);
 }
 
 void loop()
 {
-  chargingOff();
-  delay(chargeSeconds * 1000l);
   flashCircle();
-  chargingOn();
-  delay(delaySeconds * 1000l);
-}
-
-void chargingOff()
-{
-  digitalWrite(chargePin, LOW);
-}
-
-void chargingOn()
-{
-  digitalWrite(chargePin, HIGH);
+  delay(overallDelay * 1000l);
 }
 
 void flashCircle()
 {
-  for (int i = 0; i < 4; i++)
+  for (int i = 0; i < 3; i++)
   {
-    digitalWrite(flashPins[i], LOW);
-    delay(200);
     digitalWrite(flashPins[i], HIGH);
-    delay(500);
+    delay(200);
+    digitalWrite(flashPins[i], LOW);
+    delay(delayBetweenFlashes * 1000l);
   }
 }
 
