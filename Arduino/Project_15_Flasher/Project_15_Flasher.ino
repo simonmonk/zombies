@@ -1,7 +1,7 @@
 const int flashPins[] = {7, 6, 5};
 
-const int overallDelay = 30; // seconds
-const int delayBetweenFlashes = 1; // seconds
+const long overallDelay = 20; // seconds
+const long delayBetweenFlashes = 1; // seconds
 
 void setup()
 {
@@ -13,7 +13,7 @@ void setup()
 void loop()
 {
   flashCircle();
-  delay(overallDelay * 1000l);
+  delay(overallDelay * 1000);
 }
 
 void flashCircle()
@@ -23,7 +23,7 @@ void flashCircle()
     digitalWrite(flashPins[i], HIGH);
     delay(200);
     digitalWrite(flashPins[i], LOW);
-    delay(delayBetweenFlashes * 1000l);
+    delay(delayBetweenFlashes * 1000);
   }
 }
 
