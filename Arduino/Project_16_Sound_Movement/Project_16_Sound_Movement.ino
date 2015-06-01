@@ -8,7 +8,7 @@ const int sounderPinA = 8;
 const int sounderPinB = 9;
 const int servoPin = 10;
 
-const long f = 700; // find f using Project_16_sounder_test
+const long f = 3800; // find f using Project_16_sounder_test
 
 Servo arm;
 
