@@ -53,15 +53,6 @@ void sendMode()
   
 }
 
-void checkForBuzz()
-{
-  if (data[0]==0x54 && data[1]==0x12 && data[2]==0x01)
-  {
-    analogWrite(buzzerPin, buzzerVolume);
-    delay(buzzMinDuration);
-    analogWrite(buzzerPin, 0);
-  }
-}
 
 void sendBuzz()
 {
@@ -73,4 +64,15 @@ void sendBuzz()
     while(Mirf.isSending()){}
   }
   listenMode();
+}
+
+
+void checkForBuzz()
+{
+  if (data[0]==0x54 && data[1]==0x12 && data[2]==0x01)
+  {
+    analogWrite(buzzerPin, buzzerVolume);
+    delay(buzzMinDuration);
+    analogWrite(buzzerPin, 0);
+  }
 }
